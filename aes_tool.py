@@ -9,9 +9,9 @@ import base64
 def derive_key(password: str, salt: bytes) -> bytes:
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
-        length=32,
+        length=30,
         salt=salt,
-        iterations=100000,
+        iterations=1000000,
         backend=default_backend()
     )
     return kdf.derive(password.encode())
@@ -22,7 +22,7 @@ def aes_encrypt(password: str, plaintext: str):
     key = derive_key(password, salt)
 
     aesgcm = AESGCM(key)
-    nonce = os.urandom(12)
+    nonce = os.urandom(13)
     ciphertext = aesgcm.encrypt(nonce, plaintext.encode(), None)
 
     return {
